@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -47,7 +48,18 @@ public class UploadService {
     public String upload(MultipartFile file) throws Exception {
         if (!file.isEmpty()) {
             // 파일 이름 UUID_원래파일
-            String fileName = "%s_%s".formatted(UUID.randomUUID().toString(), file.getOriginalFilename()); // UUID 코드 + _ + 원래이름
+//            String fileName = "%s_%s".formatted(UUID.randomUUID().toString(), file.getOriginalFilename()); // UUID 코드 + _ + 원래이름
+            // 한글로 인해서 S3에 못들어가는 문제 해결 하는 코드
+            // TIL : URL 인코딩으로 한글을 뭉게버리는 방법
+            String uuid = UUID.randomUUID().toString();
+            String extension = "";
+            String originalFilename = file.getOriginalFilename();
+            // Null Safety 코드 반영
+            int dotIndex = Objects.requireNonNull(originalFilename).lastIndexOf(".");
+            if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
+                extension = originalFilename.substring(dotIndex + 1);
+            }
+            String fileName = "%s.%s".formatted(uuid, extension); // UUID 코드 + _ + 확장자
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(fileName)

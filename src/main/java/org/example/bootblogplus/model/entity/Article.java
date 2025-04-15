@@ -20,6 +20,7 @@ public class Article {
     @CreatedDate // Listener.
             // createdAt. default? TIL.
     LocalDateTime createTime = LocalDateTime.now(); // JPA
-    @Column(nullable = false, length = 2000)
+//    @Column(nullable = false, length = 2000)
+    @Column(nullable = false) // uuid + 확장자만...
     String imageUrl;
 }

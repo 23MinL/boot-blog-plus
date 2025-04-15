@@ -20,4 +20,6 @@ public class Article {
     @CreatedDate // Listener.
             // createdAt. default? TIL.
     LocalDateTime createTime = LocalDateTime.now(); // JPA
+    @Column(nullable = false, length = 2000)
+    String imageUrl;
 }

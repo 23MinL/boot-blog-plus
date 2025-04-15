@@ -3,6 +3,7 @@ package org.example.bootblogplus.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.bootblogplus.model.form.ArticleForm;
 import org.example.bootblogplus.service.BlogService;
+import org.example.bootblogplus.service.UploadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class BlogController {
     private final BlogService blogService;
+    private final UploadService uploadService;
 
     @GetMapping
     public String list(Model model) {
@@ -36,7 +38,8 @@ public class BlogController {
 //        article.setTitle(form.title());
 //        article.setContent(form.content());
         try {
-            blogService.createArticle(form.formToEntity());
+            String imageUrl = uploadService.upload(form.imageFile());
+            blogService.createArticle(form.formToEntity(imageUrl));
             return "redirect:/blog";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());

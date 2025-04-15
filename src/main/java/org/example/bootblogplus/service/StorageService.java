@@ -4,9 +4,12 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.net.URI;
@@ -14,12 +17,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class UploadService {
+public class StorageService {
     // lombok value가 아님 주의! (application.yml에서 불러오겠다
     private final String bucketName;
     private final S3Client s3Client;
     // S3 -> 외부 서비스 -> Supabase -> 끌어온건 이해함? -> 주입해서 Service.
-    public UploadService(
+    public StorageService(
             // Value -> application.yml => 끌어오겠다 => 코드 내부로.
             @Value("${aws.s3.bucketName}") String bucketName,
             @Value("${aws.s3.region}") String region,
@@ -68,5 +71,15 @@ public class UploadService {
             return fileName;
         }
         throw new BadRequestException("파일 누락");
+    }
+
+    public byte[] download(String fileName) {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .build();
+
+        ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObjectAsBytes(getObjectRequest);
+        return objectBytes.asByteArray();
     }
 }

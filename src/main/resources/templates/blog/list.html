@@ -13,7 +13,7 @@
             <h1 th:text="${article.title}"></h1>
             <p th:text="${article.content}"></p>
             <section>
-                <img th:src="${article.imageUrl}" th:alt="${article.title}">
+                <img th:src="@{/blog/image/{filename}(filename=${article.imageUrl})} " th:alt="${article.title}">
             </section>
         </div>
     </section>

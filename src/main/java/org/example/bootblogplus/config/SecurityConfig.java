@@ -20,6 +20,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
 //                        .failureUrl("/login/failure")
                 );
+        // OAuth2UserService
         return http.build();
     }
 }

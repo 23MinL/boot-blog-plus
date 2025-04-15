@@ -54,21 +54,23 @@ public class StorageService {
 //            String fileName = "%s_%s".formatted(UUID.randomUUID().toString(), file.getOriginalFilename()); // UUID 코드 + _ + 원래이름
             // 한글로 인해서 S3에 못들어가는 문제 해결 하는 코드
             // TIL : URL 인코딩으로 한글을 뭉게버리는 방법
-            String uuid = UUID.randomUUID().toString();
-            String extension = "";
-            String originalFilename = file.getOriginalFilename();
+//            String uuid = UUID.randomUUID().toString();
+//            String extension = "";
+//            String originalFilename = file.getOriginalFilename();
             // Null Safety 코드 반영
-            int dotIndex = Objects.requireNonNull(originalFilename).lastIndexOf(".");
-            if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
-                extension = originalFilename.substring(dotIndex + 1);
-            }
-            String fileName = "%s.%s".formatted(uuid, extension); // UUID 코드 + _ + 확장자
+//            int dotIndex = Objects.requireNonNull(originalFilename).lastIndexOf(".");
+//            if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
+//                extension = originalFilename.substring(dotIndex + 1);
+//            }
+//            String fileName = "%s.%s".formatted(uuid, extension); // UUID 코드 + _ + 확장자
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .key(fileName)
+//                    .key(fileName)
+                    .key(file.getOriginalFilename())
+                    .contentType(file.getContentType())
                     .build();
             s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
-            return fileName;
+            return file.getOriginalFilename();
         }
         throw new BadRequestException("파일 누락");
     }

@@ -19,6 +19,7 @@ public class UploadService {
     private final S3Client s3Client;
     // S3 -> 외부 서비스 -> Supabase -> 끌어온건 이해함? -> 주입해서 Service.
     public UploadService(
+            // Value -> application.yml => 끌어오겠다 => 코드 내부로.
             @Value("${aws.s3.bucketName}") String bucketName,
             @Value("${aws.s3.region}") String region,
             @Value("${aws.s3.url}") String url,
@@ -45,6 +46,7 @@ public class UploadService {
 
     public String upload(MultipartFile file) throws Exception {
         if (!file.isEmpty()) {
+            // 파일 이름 UUID_원래파일
             String fileName = "%s_%s".formatted(UUID.randomUUID().toString(), file.getOriginalFilename()); // UUID 코드 + _ + 원래이름
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)

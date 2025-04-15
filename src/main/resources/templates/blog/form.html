@@ -9,15 +9,16 @@
 </head>
 <body>
     <h1 th:text="${message}"></h1>
+    <!-- security -> csrf -->
     <form th:action="@{/blog/new}" th:object="${form}" method="post">
         <section>
             <label>
-                제목 : <input type="text" th:field="*{title}">
+                제목 : <input type="text" th:field="*{title}" required>
             </label>
         </section>
         <section>
             <label>
-                내용 : <textarea th:field="*{content}"></textarea>
+                내용 : <textarea th:field="*{content}" required></textarea>
             </label>
         </section>
         <section>

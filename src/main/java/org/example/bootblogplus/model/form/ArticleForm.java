@@ -10,6 +10,7 @@ public record ArticleForm(String title, String content) {
         return article;
     }
     public static ArticleForm empty() {
+        // 시맨틱 코딩
         return new ArticleForm("", "");
     }
 }

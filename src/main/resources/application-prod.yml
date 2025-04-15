@@ -20,7 +20,7 @@ spring:
 aws:
   s3:
     bucketName: ${STORAGE_BUCKET_NAME}
-    region: ${STORAGE_REGION}
     url: ${STORAGE_URL}
+    region: ${STORAGE_REGION}
     accessKey: ${STORAGE_AK}
     secretKey: ${STORAGE_SK}

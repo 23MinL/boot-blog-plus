@@ -9,7 +9,6 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 
@@ -17,7 +16,6 @@ import java.util.UUID;
 public class UploadService {
     // lombok value가 아님 주의! (application.yml에서 불러오겠다
     private final String bucketName;
-    private final String url;
     private final S3Client s3Client;
     // S3 -> 외부 서비스 -> Supabase -> 끌어온건 이해함? -> 주입해서 Service.
     public UploadService(
@@ -27,7 +25,6 @@ public class UploadService {
             @Value("${aws.s3.accessKey}") String accessKey,
             @Value("${aws.s3.secretKey}") String secretKey) {
         this.bucketName = bucketName;
-        this.url = url;
         this.s3Client = S3Client.builder()
                 .region(Region.of(region))
                 .endpointOverride(URI.create(url))
